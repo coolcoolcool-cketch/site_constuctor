@@ -1,0 +1,3053 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sites Constructor</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#111827;
+    color:white;
+    overflow:hidden;
+}
+
+/* TOP */
+
+.topbar{
+    height:60px;
+    background:#1f2937;
+    border-bottom:1px solid #374151;
+    display:flex;
+    align-items:center;
+    padding:0 14px;
+    gap:8px;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+    margin-right:auto;
+}
+
+.logo span{
+    color:#60a5fa;
+}
+
+.top-btn{
+    background:#374151;
+    color:white;
+    border:0;
+    border-radius:7px;
+    padding:9px 13px;
+    cursor:pointer;
+}
+
+.top-btn:hover{
+    background:#4b5563;
+}
+
+.export{
+    background:#2563eb;
+}
+
+.export:hover{
+    background:#1d4ed8;
+}
+
+/* APP */
+
+.app{
+    height:calc(100vh - 60px);
+    display:grid;
+    grid-template-columns:230px 1fr 300px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    background:#1f2937;
+    overflow-y:auto;
+}
+
+.left{
+    border-right:1px solid #374151;
+}
+
+.right{
+    border-left:1px solid #374151;
+}
+
+.panel-title{
+    padding:15px;
+    font-weight:bold;
+    border-bottom:1px solid #374151;
+}
+
+/* BLOCKS */
+
+.blocks{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.block{
+    background:#374151;
+    border:1px solid #4b5563;
+    border-radius:8px;
+    padding:12px;
+    cursor:grab;
+    user-select:none;
+}
+
+.block:hover{
+    background:#4b5563;
+}
+
+.block:active{
+    cursor:grabbing;
+}
+
+.block-name{
+    font-weight:bold;
+}
+
+.block-description{
+    color:#9ca3af;
+    font-size:12px;
+    margin-top:4px;
+}
+
+/* WORKSPACE */
+
+.workspace{
+    background:#0b1220;
+    overflow:auto;
+    padding:35px;
+}
+
+.canvas{
+    width:1000px;
+    min-height:750px;
+    background:white;
+    color:#111827;
+    margin:auto;
+    padding:20px;
+    box-shadow:0 20px 60px #0008;
+}
+
+.canvas.drag-over{
+    outline:3px dashed #3b82f6;
+    outline-offset:5px;
+}
+
+.empty{
+    height:700px;
+    border:2px dashed #d1d5db;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#9ca3af;
+}
+
+/* ELEMENT */
+
+.element{
+    position:relative;
+    margin:8px 0;
+    padding:8px;
+    border:2px solid transparent;
+    cursor:grab;
+    user-select:none;
+}
+
+.element:hover{
+    border-color:#93c5fd;
+}
+
+.element.selected{
+    border-color:#2563eb;
+}
+
+.element.dragging{
+    opacity:.35;
+}
+
+/* SITE */
+
+.site-heading{
+    margin:0;
+}
+
+.site-text{
+    line-height:1.6;
+}
+
+.site-button{
+    display:inline-block;
+    background:#2563eb;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.site-image{
+    max-width:100%;
+    display:block;
+}
+
+.hero{
+    padding:60px 35px;
+    background:#eef2ff;
+    border-radius:14px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:42px;
+    margin:0 0 15px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.card{
+    background:#f3f4f6;
+    padding:25px;
+    border-radius:12px;
+}
+
+.divider{
+    height:2px;
+    background:#d1d5db;
+    width:100%;
+}
+
+.site-list{
+    line-height:2;
+}
+
+.site-video{
+    width:100%;
+    min-height:350px;
+    border:0;
+}
+
+.footer{
+    background:#111827;
+    color:white;
+    padding:30px;
+    text-align:center;
+}
+
+/* PROPERTIES */
+
+.properties{
+    padding:14px;
+}
+
+.property{
+    margin-bottom:13px;
+}
+
+.property label{
+    display:block;
+    color:#9ca3af;
+    font-size:12px;
+    margin-bottom:5px;
+}
+
+.property input,
+.property textarea,
+.property select{
+    width:100%;
+    background:#111827;
+    color:white;
+    border:1px solid #4b5563;
+    border-radius:7px;
+    padding:9px;
+}
+
+.property textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.property input[type="color"]{
+    padding:3px;
+    height:40px;
+}
+
+.property input[type="range"]{
+    padding:0;
+}
+
+.range-value{
+    color:#60a5fa;
+    font-size:12px;
+    float:right;
+}
+
+.action-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-bottom:8px;
+}
+
+.action{
+    background:#374151;
+    color:white;
+    border:0;
+    border-radius:7px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.action:hover{
+    background:#4b5563;
+}
+
+.delete{
+    width:100%;
+    background:#991b1b;
+    color:white;
+    border:0;
+    border-radius:7px;
+    padding:10px;
+    cursor:pointer;
+}
+
+.delete:hover{
+    background:#b91c1c;
+}
+
+.help{
+    color:#9ca3af;
+    font-size:13px;
+    line-height:1.5;
+}
+
+/* PREVIEW */
+
+.preview{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:white;
+}
+
+.preview-bar{
+    height:55px;
+    background:#1f2937;
+    display:flex;
+    align-items:center;
+    padding:0 14px;
+}
+
+.preview-title{
+    margin-right:auto;
+}
+
+.preview iframe{
+    width:100%;
+    height:calc(100% - 55px);
+    border:0;
+}
+
+.close-preview{
+    background:#991b1b;
+    color:white;
+    border:0;
+    padding:9px 14px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#2563eb;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+    display:none;
+    z-index:2000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+
+    <div class="logo">
+        Sites <span>Constructor</span>
+    </div>
+
+    <button class="top-btn" onclick="newProject()">
+        Новый
+    </button>
+
+    <button class="top-btn" onclick="undo()">
+        ↶
+    </button>
+
+    <button class="top-btn" onclick="redo()">
+        ↷
+    </button>
+
+    <button class="top-btn" onclick="showPreview()">
+        👁 Предпросмотр
+    </button>
+
+    <button class="top-btn export" onclick="exportHTML()">
+        ⬇ Экспорт HTML
+    </button>
+
+</div>
+
+
+<div class="app">
+
+<!-- LEFT -->
+
+<aside class="sidebar left">
+
+    <div class="panel-title">
+        Элементы
+    </div>
+
+    <div class="blocks">
+
+        <div class="block" draggable="true" data-type="heading">
+            <div class="block-name">Заголовок</div>
+            <div class="block-description">H1 заголовок</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="text">
+            <div class="block-name">Текст</div>
+            <div class="block-description">Обычный текст</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="button">
+            <div class="block-name">Кнопка</div>
+            <div class="block-description">Кнопка со ссылкой</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="image">
+            <div class="block-name">Изображение</div>
+            <div class="block-description">Картинка по URL</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="hero">
+            <div class="block-name">Hero</div>
+            <div class="block-description">Главный экран</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="card">
+            <div class="block-name">Карточка</div>
+            <div class="block-description">Информационный блок</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="list">
+            <div class="block-name">Список</div>
+            <div class="block-description">Маркированный список</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="link">
+            <div class="block-name">Ссылка</div>
+            <div class="block-description">Обычная ссылка</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="video">
+            <div class="block-name">Видео</div>
+            <div class="block-description">YouTube iframe</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="divider">
+            <div class="block-name">Разделитель</div>
+            <div class="block-description">Горизонтальная линия</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="spacer">
+            <div class="block-name">Отступ</div>
+            <div class="block-description">Пустое пространство</div>
+        </div>
+
+        <div class="block" draggable="true" data-type="footer">
+            <div class="block-name">Footer</div>
+            <div class="block-description">Подвал сайта</div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- CANVAS -->
+
+<main class="workspace">
+
+    <div id="canvas" class="canvas">
+
+        <div id="empty" class="empty">
+
+            <div>
+                <h2>Перетащи блок сюда</h2>
+
+                <p>
+                    Выбери элемент слева и собери сайт
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- RIGHT -->
+
+<aside class="sidebar right">
+
+    <div class="panel-title">
+        Свойства
+    </div>
+
+    <div id="properties" class="properties">
+
+        <div class="help">
+            Выбери блок на странице.
+            <br><br>
+            Все изменения выполняются
+            через эту панель.
+            <br><br>
+            ↑ ↓ — изменить порядок.
+        </div>
+
+    </div>
+
+</aside>
+
+</div>
+
+
+<!-- PREVIEW -->
+
+<div id="preview" class="preview">
+
+    <div class="preview-bar">
+
+        <div class="preview-title">
+            Предпросмотр
+        </div>
+
+        <button
+            class="close-preview"
+            onclick="closePreview()">
+
+            Закрыть
+
+        </button>
+
+    </div>
+
+    <iframe id="previewFrame"></iframe>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+let selected = null;
+
+let history = [];
+
+let historyIndex = -1;
+
+let historyTimer = null;
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   SIDEBAR DRAG
+========================================================= */
+
+document.querySelectorAll(".block").forEach(block=>{
+
+    block.addEventListener("dragstart",function(e){
+
+        e.dataTransfer.effectAllowed="copy";
+
+        e.dataTransfer.setData(
+            "newType",
+            this.dataset.type
+        );
+
+    });
+
+});
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+const canvas =
+    document.getElementById("canvas");
+
+
+canvas.addEventListener("dragover",function(e){
+
+    e.preventDefault();
+
+    canvas.classList.add("drag-over");
+
+    const dragging =
+        document.querySelector(".element.dragging");
+
+    if(!dragging) return;
+
+    const after =
+        getDragAfterElement(
+            canvas,
+            e.clientY
+        );
+
+    if(after===null){
+
+        canvas.appendChild(dragging);
+
+    }else{
+
+        canvas.insertBefore(
+            dragging,
+            after
+        );
+
+    }
+
+});
+
+
+canvas.addEventListener("dragleave",function(){
+
+    canvas.classList.remove("drag-over");
+
+});
+
+
+canvas.addEventListener("drop",function(e){
+
+    e.preventDefault();
+
+    canvas.classList.remove("drag-over");
+
+    const newType =
+        e.dataTransfer.getData("newType");
+
+    if(newType){
+
+        addElement(newType);
+
+    }
+
+    updateEmpty();
+
+});
+
+
+/* =========================================================
+   DRAG POSITION
+========================================================= */
+
+function getDragAfterElement(container,y){
+
+    const elements=[
+        ...container.querySelectorAll(
+            ".element:not(.dragging)"
+        )
+    ];
+
+    return elements.reduce(
+        (closest,child)=>{
+
+            const box =
+                child.getBoundingClientRect();
+
+            const offset =
+                y -
+                box.top -
+                box.height/2;
+
+            if(
+                offset<0 &&
+                offset>closest.offset
+            ){
+
+                return {
+                    offset:offset,
+                    element:child
+                };
+
+            }
+
+            return closest;
+
+        },
+        {
+            offset:Number.NEGATIVE_INFINITY,
+            element:null
+        }
+    ).element;
+
+}
+
+
+/* =========================================================
+   ADD ELEMENT
+========================================================= */
+
+function addElement(type,insertBefore=null){
+
+    const element =
+        document.createElement("div");
+
+    element.className="element";
+
+    element.dataset.type=type;
+
+    element.draggable=true;
+
+    let html="";
+
+
+    if(type==="heading"){
+
+        html=`
+            <h1 class="site-heading">
+                Заголовок сайта
+            </h1>
+        `;
+
+    }
+
+
+    if(type==="text"){
+
+        html=`
+            <p class="site-text">
+                Это текст вашего сайта.
+            </p>
+        `;
+
+    }
+
+
+    if(type==="button"){
+
+        html=`
+            <a
+                class="site-button"
+                href="#"
+            >
+                Кнопка
+            </a>
+        `;
+
+    }
+
+
+    if(type==="image"){
+
+        html=`
+            <img
+                class="site-image"
+                src="https://picsum.photos/900/400"
+                alt="Изображение"
+            >
+        `;
+
+    }
+
+
+    if(type==="hero"){
+
+        html=`
+            <section class="hero">
+
+                <h1>
+                    Добро пожаловать!
+                </h1>
+
+                <p>
+                    Создай свой сайт
+                    в Sites Constructor
+                </p>
+
+                <a
+                    class="site-button"
+                    href="#"
+                >
+                    Начать
+                </a>
+
+            </section>
+        `;
+
+    }
+
+
+    if(type==="card"){
+
+        html=`
+            <div class="card">
+
+                <h2>
+                    Карточка
+                </h2>
+
+                <p>
+                    Здесь находится
+                    информация.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    if(type==="list"){
+
+        html=`
+            <ul class="site-list">
+
+                <li>Первый пункт</li>
+                <li>Второй пункт</li>
+                <li>Третий пункт</li>
+
+            </ul>
+        `;
+
+    }
+
+
+    if(type==="link"){
+
+        html=`
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Открыть ссылку
+            </a>
+        `;
+
+    }
+
+
+    if(type==="video"){
+
+        html=`
+            <iframe
+                class="site-video"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                allowfullscreen
+            ></iframe>
+        `;
+
+    }
+
+
+    if(type==="divider"){
+
+        html=`
+            <div class="divider"></div>
+        `;
+
+    }
+
+
+    if(type==="spacer"){
+
+        html=`
+            <div style="height:80px"></div>
+        `;
+
+    }
+
+
+    if(type==="footer"){
+
+        html=`
+            <footer class="footer">
+                © 2026 Мой сайт
+            </footer>
+        `;
+
+    }
+
+
+    element.innerHTML=html;
+
+
+    attachElementEvents(element);
+
+
+    if(insertBefore){
+
+        canvas.insertBefore(
+            element,
+            insertBefore
+        );
+
+    }else{
+
+        canvas.appendChild(element);
+
+    }
+
+
+    selectElement(element);
+
+    updateEmpty();
+
+    saveHistory();
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function attachElementEvents(element){
+
+    element.addEventListener(
+        "click",
+        function(e){
+
+            e.stopPropagation();
+
+            selectElement(element);
+
+        }
+    );
+
+
+    element.addEventListener(
+        "dragstart",
+        function(e){
+
+            this.classList.add("dragging");
+
+            e.dataTransfer.effectAllowed="move";
+
+        }
+    );
+
+
+    element.addEventListener(
+        "dragend",
+        function(){
+
+            this.classList.remove("dragging");
+
+            saveHistory();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function selectElement(element){
+
+    document
+        .querySelectorAll(".element")
+        .forEach(el=>{
+
+            el.classList.remove("selected");
+
+        });
+
+
+    selected=element;
+
+    element.classList.add("selected");
+
+    showProperties(element);
+
+}
+
+
+/* =========================================================
+   PROPERTY HELPERS
+========================================================= */
+
+function getEditableTarget(element){
+
+    const type =
+        element.dataset.type;
+
+    if(type==="image"){
+
+        return element.querySelector("img");
+
+    }
+
+    if(type==="video"){
+
+        return element.querySelector("iframe");
+
+    }
+
+    if(type==="divider" || type==="spacer"){
+
+        return null;
+
+    }
+
+    if(type==="hero"){
+
+        return element.querySelector("h1");
+
+    }
+
+    if(type==="card"){
+
+        return element.querySelector("h2");
+
+    }
+
+    return element.firstElementChild;
+
+}
+
+
+function getText(element){
+
+    const type =
+        element.dataset.type;
+
+
+    if(type==="hero"){
+
+        return element.querySelector("h1")?.innerText || "";
+
+    }
+
+
+    if(type==="card"){
+
+        return element.querySelector("h2")?.innerText || "";
+
+    }
+
+
+    if(type==="list"){
+
+        return [
+            ...element.querySelectorAll("li")
+        ]
+        .map(x=>x.innerText)
+        .join("\n");
+
+    }
+
+
+    const target =
+        getEditableTarget(element);
+
+    return target
+        ? target.innerText
+        : "";
+
+}
+
+
+/* =========================================================
+   SHOW PROPERTIES
+========================================================= */
+
+function showProperties(element){
+
+    const props =
+        document.getElementById("properties");
+
+    const type =
+        element.dataset.type;
+
+    let text =
+        getText(element);
+
+    let url="";
+
+    const link =
+        element.querySelector("a");
+
+    if(link){
+
+        url =
+            link.getAttribute("href") || "";
+
+    }
+
+
+    const image =
+        element.querySelector("img");
+
+    const iframe =
+        element.querySelector("iframe");
+
+
+    let imageURL =
+        image
+        ? image.getAttribute("src") || ""
+        : "";
+
+
+    let videoURL =
+        iframe
+        ? iframe.getAttribute("src") || ""
+        : "";
+
+
+    const computed =
+        getComputedStyle(element);
+
+
+    let color =
+        rgbToHex(computed.color);
+
+
+    let background =
+        rgbToHex(
+            computed.backgroundColor
+        );
+
+
+    if(
+        !computed.backgroundColor ||
+        computed.backgroundColor==="rgba(0, 0, 0, 0)"
+    ){
+
+        background="#ffffff";
+
+    }
+
+
+    let radius =
+        parseInt(computed.borderRadius) || 0;
+
+
+    let padding =
+        parseInt(computed.padding) || 0;
+
+
+    let width =
+        element.style.width || "100%";
+
+
+    let shadow =
+        element.style.boxShadow
+        ? "yes"
+        : "no";
+
+
+    let fontSize="";
+
+    const target =
+        getEditableTarget(element);
+
+    if(target){
+
+        fontSize =
+            target.style.fontSize || "";
+
+    }
+
+
+    let align =
+        element.style.textAlign || "";
+
+
+    props.innerHTML=`
+
+        <div class="action-row">
+
+            <button
+                class="action"
+                id="moveUpBtn">
+
+                ↑ Вверх
+
+            </button>
+
+            <button
+                class="action"
+                id="moveDownBtn">
+
+                ↓ Вниз
+
+            </button>
+
+        </div>
+
+
+        <div class="action-row">
+
+            <button
+                class="action"
+                id="duplicateBtn">
+
+                ⧉ Дублировать
+
+            </button>
+
+            <button
+                class="action"
+                id="resetBtn">
+
+                ↺ Сброс
+
+            </button>
+
+        </div>
+
+
+        <div class="property">
+
+            <label>Тип</label>
+
+            <input
+                value="${escapeHTML(type)}"
+                disabled>
+
+        </div>
+
+
+        ${
+            type!=="image" &&
+            type!=="divider" &&
+            type!=="spacer" &&
+            type!=="video"
+            ?
+            `
+
+            <div class="property">
+
+                <label>Текст</label>
+
+                <textarea
+                    id="textProp"
+                >${escapeHTML(text)}</textarea>
+
+            </div>
+
+            `
+            :
+            ""
+        }
+
+
+        ${
+            type==="button" ||
+            type==="link"
+            ?
+            `
+
+            <div class="property">
+
+                <label>URL ссылки</label>
+
+                <input
+                    id="urlProp"
+                    value="${escapeHTML(url)}">
+
+            </div>
+
+            `
+            :
+            ""
+        }
+
+
+        ${
+            type==="image"
+            ?
+            `
+
+            <div class="property">
+
+                <label>URL изображения</label>
+
+                <input
+                    id="imageProp"
+                    value="${escapeHTML(imageURL)}">
+
+            </div>
+
+            `
+            :
+            ""
+        }
+
+
+        ${
+            type==="video"
+            ?
+            `
+
+            <div class="property">
+
+                <label>URL YouTube</label>
+
+                <input
+                    id="videoProp"
+                    value="${escapeHTML(videoURL)}">
+
+            </div>
+
+            `
+            :
+            ""
+        }
+
+
+        <div class="property">
+
+            <label>Цвет текста</label>
+
+            <input
+                type="color"
+                id="colorProp"
+                value="${color}">
+
+        </div>
+
+
+        <div class="property">
+
+            <label>Цвет фона</label>
+
+            <input
+                type="color"
+                id="bgProp"
+                value="${background}">
+
+        </div>
+
+
+        <div class="property">
+
+            <label>Размер текста</label>
+
+            <select id="sizeProp">
+
+                <option value="">По умолчанию</option>
+
+                <option value="14px"
+                    ${fontSize==="14px"?"selected":""}>
+                    14px
+                </option>
+
+                <option value="16px"
+                    ${fontSize==="16px"?"selected":""}>
+                    16px
+                </option>
+
+                <option value="18px"
+                    ${fontSize==="18px"?"selected":""}>
+                    18px
+                </option>
+
+                <option value="22px"
+                    ${fontSize==="22px"?"selected":""}>
+                    22px
+                </option>
+
+                <option value="28px"
+                    ${fontSize==="28px"?"selected":""}>
+                    28px
+                </option>
+
+                <option value="36px"
+                    ${fontSize==="36px"?"selected":""}>
+                    36px
+                </option>
+
+                <option value="48px"
+                    ${fontSize==="48px"?"selected":""}>
+                    48px
+                </option>
+
+                <option value="64px"
+                    ${fontSize==="64px"?"selected":""}>
+                    64px
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="property">
+
+            <label>
+                Выравнивание
+            </label>
+
+            <select id="alignProp">
+
+                <option value=""
+                    ${align===""?"selected":""}>
+                    По умолчанию
+                </option>
+
+                <option value="left"
+                    ${align==="left"?"selected":""}>
+                    Слева
+                </option>
+
+                <option value="center"
+                    ${align==="center"?"selected":""}>
+                    По центру
+                </option>
+
+                <option value="right"
+                    ${align==="right"?"selected":""}>
+                    Справа
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="property">
+
+            <label>
+                Скругление
+                <span
+                    class="range-value"
+                    id="radiusValue">
+                    ${radius}px
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="radiusProp"
+                min="0"
+                max="80"
+                value="${radius}">
+
+        </div>
+
+
+        <div class="property">
+
+            <label>
+                Отступы
+                <span
+                    class="range-value"
+                    id="paddingValue">
+                    ${padding}px
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="paddingProp"
+                min="0"
+                max="100"
+                value="${padding}">
+
+        </div>
+
+
+        <div class="property">
+
+            <label>
+                Ширина
+                <span
+                    class="range-value"
+                    id="widthValue">
+                    ${width}
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="widthProp"
+                min="20"
+                max="100"
+                value="${parseInt(width)||100}">
+
+        </div>
+
+
+        <div class="property">
+
+            <label>
+                Тень
+            </label>
+
+            <select id="shadowProp">
+
+                <option value="no"
+                    ${shadow==="no"?"selected":""}>
+                    Нет
+                </option>
+
+                <option value="yes"
+                    ${shadow==="yes"?"selected":""}>
+                    Есть
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <button
+            class="delete"
+            id="deleteBtn">
+
+            🗑 Удалить
+
+        </button>
+
+    `;
+
+
+    /* BUTTONS */
+
+    document
+        .getElementById("moveUpBtn")
+        .onclick=moveUp;
+
+
+    document
+        .getElementById("moveDownBtn")
+        .onclick=moveDown;
+
+
+    document
+        .getElementById("duplicateBtn")
+        .onclick=duplicateSelected;
+
+
+    document
+        .getElementById("resetBtn")
+        .onclick=resetElement;
+
+
+    document
+        .getElementById("deleteBtn")
+        .onclick=deleteSelected;
+
+
+    /* TEXT */
+
+    const textProp =
+        document.getElementById("textProp");
+
+
+    if(textProp){
+
+        textProp.addEventListener(
+            "input",
+            function(){
+
+                setElementText(
+                    element,
+                    this.value
+                );
+
+                scheduleHistory();
+
+            }
+        );
+
+    }
+
+
+    /* URL */
+
+    const urlProp =
+        document.getElementById("urlProp");
+
+
+    if(urlProp){
+
+        urlProp.addEventListener(
+            "input",
+            function(){
+
+                const links =
+                    element.querySelectorAll("a");
+
+                links.forEach(a=>{
+                    a.setAttribute(
+                        "href",
+                        this.value
+                    );
+                });
+
+                scheduleHistory();
+
+            }
+        );
+
+    }
+
+
+    /* IMAGE */
+
+    const imageProp =
+        document.getElementById("imageProp");
+
+
+    if(imageProp){
+
+        imageProp.addEventListener(
+            "input",
+            function(){
+
+                const img =
+                    element.querySelector("img");
+
+                if(img){
+
+                    img.setAttribute(
+                        "src",
+                        this.value
+                    );
+
+                }
+
+                scheduleHistory();
+
+            }
+        );
+
+    }
+
+
+    /* VIDEO */
+
+    const videoProp =
+        document.getElementById("videoProp");
+
+
+    if(videoProp){
+
+        videoProp.addEventListener(
+            "input",
+            function(){
+
+                const frame =
+                    element.querySelector("iframe");
+
+                if(frame){
+
+                    frame.setAttribute(
+                        "src",
+                        youtubeURL(this.value)
+                    );
+
+                }
+
+                scheduleHistory();
+
+            }
+        );
+
+    }
+
+
+    /* COLOR */
+
+    const colorProp =
+        document.getElementById("colorProp");
+
+
+    colorProp.addEventListener(
+        "input",
+        function(){
+
+            element.style.color=
+                this.value;
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* BACKGROUND */
+
+    const bgProp =
+        document.getElementById("bgProp");
+
+
+    bgProp.addEventListener(
+        "input",
+        function(){
+
+            element.style.backgroundColor=
+                this.value;
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* FONT */
+
+    const sizeProp =
+        document.getElementById("sizeProp");
+
+
+    sizeProp.addEventListener(
+        "change",
+        function(){
+
+            const target =
+                getEditableTarget(element);
+
+            if(target){
+
+                target.style.fontSize=
+                    this.value;
+
+            }
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* ALIGN */
+
+    const alignProp =
+        document.getElementById("alignProp");
+
+
+    alignProp.addEventListener(
+        "change",
+        function(){
+
+            element.style.textAlign=
+                this.value;
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* RADIUS */
+
+    const radiusProp =
+        document.getElementById("radiusProp");
+
+
+    radiusProp.addEventListener(
+        "input",
+        function(){
+
+            element.style.borderRadius=
+                this.value+"px";
+
+            document
+                .getElementById("radiusValue")
+                .innerText=
+                this.value+"px";
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* PADDING */
+
+    const paddingProp =
+        document.getElementById("paddingProp");
+
+
+    paddingProp.addEventListener(
+        "input",
+        function(){
+
+            element.style.padding=
+                this.value+"px";
+
+            document
+                .getElementById("paddingValue")
+                .innerText=
+                this.value+"px";
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* WIDTH */
+
+    const widthProp =
+        document.getElementById("widthProp");
+
+
+    widthProp.addEventListener(
+        "input",
+        function(){
+
+            element.style.width=
+                this.value+"%";
+
+            document
+                .getElementById("widthValue")
+                .innerText=
+                this.value+"%";
+
+            scheduleHistory();
+
+        }
+    );
+
+
+    /* SHADOW */
+
+    const shadowProp =
+        document.getElementById("shadowProp");
+
+
+    shadowProp.addEventListener(
+        "change",
+        function(){
+
+            if(this.value==="yes"){
+
+                element.style.boxShadow=
+                    "0 8px 25px rgba(0,0,0,.20)";
+
+            }else{
+
+                element.style.boxShadow="";
+
+            }
+
+            scheduleHistory();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SET TEXT
+========================================================= */
+
+function setElementText(element,value){
+
+    const type =
+        element.dataset.type;
+
+
+    if(type==="list"){
+
+        const lines =
+            value.split("\n");
+
+        const list =
+            element.querySelector("ul");
+
+        if(!list) return;
+
+        list.innerHTML="";
+
+        lines.forEach(line=>{
+
+            const li =
+                document.createElement("li");
+
+            li.innerText=line;
+
+            list.appendChild(li);
+
+        });
+
+        return;
+
+    }
+
+
+    if(type==="hero"){
+
+        const h1 =
+            element.querySelector("h1");
+
+        if(h1){
+
+            h1.innerText=value;
+
+        }
+
+        return;
+
+    }
+
+
+    if(type==="card"){
+
+        const h2 =
+            element.querySelector("h2");
+
+        if(h2){
+
+            h2.innerText=value;
+
+        }
+
+        return;
+
+    }
+
+
+    const target =
+        getEditableTarget(element);
+
+
+    if(target){
+
+        target.innerText=value;
+
+    }
+
+}
+
+
+/* =========================================================
+   YOUTUBE
+========================================================= */
+
+function youtubeURL(url){
+
+    try{
+
+        const parsed =
+            new URL(url);
+
+        if(
+            parsed.hostname.includes("youtube.com")
+        ){
+
+            if(parsed.pathname==="/watch"){
+
+                const id =
+                    parsed.searchParams.get("v");
+
+                if(id){
+
+                    return
+                        "https://www.youtube.com/embed/"
+                        +id;
+
+                }
+
+            }
+
+            if(
+                parsed.pathname.startsWith("/embed/")
+            ){
+
+                return url;
+
+            }
+
+        }
+
+
+        if(
+            parsed.hostname==="youtu.be"
+        ){
+
+            const id =
+                parsed.pathname.substring(1);
+
+            if(id){
+
+                return
+                    "https://www.youtube.com/embed/"
+                    +id;
+
+            }
+
+        }
+
+    }catch(e){}
+
+
+    return url;
+
+}
+
+
+/* =========================================================
+   MOVE UP
+========================================================= */
+
+function moveUp(){
+
+    if(!selected) return;
+
+    const previous =
+        selected.previousElementSibling;
+
+
+    if(
+        previous &&
+        previous.classList.contains("element")
+    ){
+
+        canvas.insertBefore(
+            selected,
+            previous
+        );
+
+        saveHistory();
+
+    }
+
+}
+
+
+/* =========================================================
+   MOVE DOWN
+========================================================= */
+
+function moveDown(){
+
+    if(!selected) return;
+
+    const next =
+        selected.nextElementSibling;
+
+
+    if(
+        next &&
+        next.classList.contains("element")
+    ){
+
+        canvas.insertBefore(
+            next,
+            selected
+        );
+
+        saveHistory();
+
+    }
+
+}
+
+
+/* =========================================================
+   DUPLICATE
+========================================================= */
+
+function duplicateSelected(){
+
+    if(!selected) return;
+
+    const copy =
+        selected.cloneNode(true);
+
+
+    copy.classList.remove("selected");
+
+    attachElementEvents(copy);
+
+
+    selected.after(copy);
+
+    selectElement(copy);
+
+    saveHistory();
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteSelected(){
+
+    if(!selected) return;
+
+    selected.remove();
+
+    selected=null;
+
+    document.getElementById(
+        "properties"
+    ).innerHTML=`
+
+        <div class="help">
+            Элемент удалён.
+        </div>
+
+    `;
+
+    updateEmpty();
+
+    saveHistory();
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetElement(){
+
+    if(!selected) return;
+
+    const type =
+        selected.dataset.type;
+
+    const old =
+        selected;
+
+
+    const replacement =
+        createElementWithoutSaving(type);
+
+
+    old.replaceWith(replacement);
+
+    selectElement(replacement);
+
+    saveHistory();
+
+}
+
+
+/* =========================================================
+   CREATE WITHOUT SAVE
+========================================================= */
+
+function createElementWithoutSaving(type){
+
+    const element =
+        document.createElement("div");
+
+    element.className="element";
+
+    element.dataset.type=type;
+
+    element.draggable=true;
+
+    let html="";
+
+
+    if(type==="heading"){
+
+        html=`
+            <h1 class="site-heading">
+                Заголовок сайта
+            </h1>
+        `;
+
+    }
+
+    if(type==="text"){
+
+        html=`
+            <p class="site-text">
+                Это текст вашего сайта.
+            </p>
+        `;
+
+    }
+
+    if(type==="button"){
+
+        html=`
+            <a
+                class="site-button"
+                href="#"
+            >
+                Кнопка
+            </a>
+        `;
+
+    }
+
+    if(type==="image"){
+
+        html=`
+            <img
+                class="site-image"
+                src="https://picsum.photos/900/400"
+                alt="Изображение"
+            >
+        `;
+
+    }
+
+    if(type==="hero"){
+
+        html=`
+            <section class="hero">
+
+                <h1>
+                    Добро пожаловать!
+                </h1>
+
+                <p>
+                    Создай свой сайт
+                    в Sites Constructor
+                </p>
+
+                <a
+                    class="site-button"
+                    href="#"
+                >
+                    Начать
+                </a>
+
+            </section>
+        `;
+
+    }
+
+    if(type==="card"){
+
+        html=`
+            <div class="card">
+
+                <h2>
+                    Карточка
+                </h2>
+
+                <p>
+                    Здесь находится
+                    информация.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+    if(type==="list"){
+
+        html=`
+            <ul class="site-list">
+
+                <li>Первый пункт</li>
+                <li>Второй пункт</li>
+                <li>Третий пункт</li>
+
+            </ul>
+        `;
+
+    }
+
+    if(type==="link"){
+
+        html=`
+            <a
+                href="https://example.com"
+                target="_blank"
+            >
+                Открыть ссылку
+            </a>
+        `;
+
+    }
+
+    if(type==="video"){
+
+        html=`
+            <iframe
+                class="site-video"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                allowfullscreen
+            ></iframe>
+        `;
+
+    }
+
+    if(type==="divider"){
+
+        html=`
+            <div class="divider"></div>
+        `;
+
+    }
+
+    if(type==="spacer"){
+
+        html=`
+            <div style="height:80px"></div>
+        `;
+
+    }
+
+    if(type==="footer"){
+
+        html=`
+            <footer class="footer">
+                © 2026 Мой сайт
+            </footer>
+        `;
+
+    }
+
+
+    element.innerHTML=html;
+
+    attachElementEvents(element);
+
+    return element;
+
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+function updateEmpty(){
+
+    const empty =
+        document.getElementById("empty");
+
+    const elements =
+        canvas.querySelectorAll(".element");
+
+
+    empty.style.display =
+        elements.length
+        ? "none"
+        : "flex";
+
+}
+
+
+/* =========================================================
+   COLORS
+========================================================= */
+
+function rgbToHex(rgb){
+
+    if(!rgb){
+
+        return "#ffffff";
+
+    }
+
+
+    const match =
+        rgb.match(/\d+/g);
+
+
+    if(
+        !match ||
+        match.length<3
+    ){
+
+        return "#ffffff";
+
+    }
+
+
+    return "#"+
+        match
+            .slice(0,3)
+            .map(
+                x=>
+                    Number(x)
+                    .toString(16)
+                    .padStart(2,"0")
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function saveHistory(){
+
+    clearTimeout(historyTimer);
+
+    const state =
+        canvas.innerHTML;
+
+
+    if(
+        history[historyIndex]===state
+    ){
+
+        return;
+
+    }
+
+
+    history =
+        history.slice(
+            0,
+            historyIndex+1
+        );
+
+
+    history.push(state);
+
+    historyIndex++;
+
+
+    if(history.length>50){
+
+        history.shift();
+
+        historyIndex--;
+
+    }
+
+}
+
+
+function scheduleHistory(){
+
+    clearTimeout(historyTimer);
+
+    historyTimer=
+        setTimeout(
+            saveHistory,
+            500
+        );
+
+}
+
+
+/* =========================================================
+   RESTORE
+========================================================= */
+
+function restoreState(state){
+
+    canvas.innerHTML=state;
+
+    selected=null;
+
+
+    canvas
+        .querySelectorAll(".element")
+        .forEach(
+            attachElementEvents
+        );
+
+
+    updateEmpty();
+
+
+    document.getElementById(
+        "properties"
+    ).innerHTML=`
+
+        <div class="help">
+            Выбери блок на странице.
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   UNDO
+========================================================= */
+
+function undo(){
+
+    if(historyIndex<=0){
+
+        return;
+
+    }
+
+
+    historyIndex--;
+
+    restoreState(
+        history[historyIndex]
+    );
+
+}
+
+
+/* =========================================================
+   REDO
+========================================================= */
+
+function redo(){
+
+    if(
+        historyIndex>=
+        history.length-1
+    ){
+
+        return;
+
+    }
+
+
+    historyIndex++;
+
+    restoreState(
+        history[historyIndex]
+    );
+
+}
+
+
+/* =========================================================
+   NEW
+========================================================= */
+
+function newProject(){
+
+    const count =
+        canvas.querySelectorAll(".element").length;
+
+
+    if(count){
+
+        if(
+            !confirm(
+                "Создать новый проект?"
+            )
+        ){
+
+            return;
+
+        }
+
+    }
+
+
+    canvas
+        .querySelectorAll(".element")
+        .forEach(
+            el=>el.remove()
+        );
+
+
+    selected=null;
+
+
+    updateEmpty();
+
+
+    document.getElementById(
+        "properties"
+    ).innerHTML=`
+
+        <div class="help">
+            Выбери блок на странице.
+        </div>
+
+    `;
+
+
+    saveHistory();
+
+}
+
+
+/* =========================================================
+   GENERATED HTML
+========================================================= */
+
+function getGeneratedHTML(){
+
+    const clone =
+        canvas.cloneNode(true);
+
+
+    clone
+        .querySelectorAll(".element")
+        .forEach(el=>{
+
+            el.classList.remove("element");
+
+            el.classList.remove("selected");
+
+            el.classList.remove("dragging");
+
+            el.removeAttribute("draggable");
+
+            el.removeAttribute("data-type");
+
+        });
+
+
+    const content =
+        clone.innerHTML;
+
+
+    return `<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0">
+
+<title>Мой сайт</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#111827;
+}
+
+.site-heading{
+    margin:0;
+}
+
+.site-text{
+    line-height:1.6;
+}
+
+.site-button{
+    display:inline-block;
+    background:#2563eb;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.site-image{
+    max-width:100%;
+    display:block;
+}
+
+.hero{
+    padding:60px 35px;
+    background:#eef2ff;
+    border-radius:14px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:42px;
+    margin:0 0 15px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.card{
+    background:#f3f4f6;
+    padding:25px;
+    border-radius:12px;
+}
+
+.divider{
+    height:2px;
+    background:#d1d5db;
+    width:100%;
+}
+
+.site-list{
+    line-height:2;
+}
+
+.site-video{
+    width:100%;
+    min-height:350px;
+    border:0;
+}
+
+.footer{
+    background:#111827;
+    color:white;
+    padding:30px;
+    text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+${content}
+
+</body>
+
+</html>`;
+
+}
+
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+function exportHTML(){
+
+    const html =
+        getGeneratedHTML();
+
+
+    const blob =
+        new Blob(
+            [html],
+            {
+                type:"text/html;charset=utf-8"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href=url;
+
+    a.download="my-site.html";
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+    setTimeout(
+        ()=>{
+            URL.revokeObjectURL(url);
+        },
+        1000
+    );
+
+
+    toast(
+        "HTML файл создан!"
+    );
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function showPreview(){
+
+    const frame =
+        document.getElementById(
+            "previewFrame"
+        );
+
+
+    frame.srcdoc =
+        getGeneratedHTML();
+
+
+    document.getElementById(
+        "preview"
+    ).style.display="block";
+
+}
+
+
+function closePreview(){
+
+    document.getElementById(
+        "preview"
+    ).style.display="none";
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(message){
+
+    const t =
+        document.getElementById("toast");
+
+
+    t.innerText=message;
+
+    t.style.display="block";
+
+
+    clearTimeout(t._timer);
+
+
+    t._timer=
+        setTimeout(
+            ()=>{
+                t.style.display="none";
+            },
+            1800
+        );
+
+}
+
+
+/* =========================================================
+   CANVAS CLICK
+========================================================= */
+
+canvas.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target===canvas){
+
+            document
+                .querySelectorAll(".element")
+                .forEach(
+                    el=>
+                        el.classList.remove(
+                            "selected"
+                        )
+                );
+
+            selected=null;
+
+
+            document.getElementById(
+                "properties"
+            ).innerHTML=`
+
+                <div class="help">
+                    Выбери блок на странице.
+                </div>
+
+            `;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        const tag =
+            e.target.tagName;
+
+
+        if(
+            e.ctrlKey &&
+            e.key.toLowerCase()==="s"
+        ){
+
+            e.preventDefault();
+
+            exportHTML();
+
+            return;
+
+        }
+
+
+        if(
+            e.ctrlKey &&
+            e.key.toLowerCase()==="z" &&
+            !e.shiftKey
+        ){
+
+            if(
+                tag!=="INPUT" &&
+                tag!=="TEXTAREA"
+            ){
+
+                e.preventDefault();
+
+                undo();
+
+            }
+
+            return;
+
+        }
+
+
+        if(
+            e.ctrlKey &&
+            (
+                e.key.toLowerCase()==="y" ||
+                (
+                    e.key.toLowerCase()==="z" &&
+                    e.shiftKey
+                )
+            )
+        ){
+
+            if(
+                tag!=="INPUT" &&
+                tag!=="TEXTAREA"
+            ){
+
+                e.preventDefault();
+
+                redo();
+
+            }
+
+            return;
+
+        }
+
+
+        if(
+            e.key==="Delete" &&
+            selected &&
+            tag!=="TEXTAREA" &&
+            tag!=="INPUT"
+        ){
+
+            deleteSelected();
+
+            return;
+
+        }
+
+
+        if(
+            e.altKey &&
+            e.key==="ArrowUp"
+        ){
+
+            e.preventDefault();
+
+            moveUp();
+
+            return;
+
+        }
+
+
+        if(
+            e.altKey &&
+            e.key==="ArrowDown"
+        ){
+
+            e.preventDefault();
+
+            moveDown();
+
+            return;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+saveHistory();
+
+updateEmpty();
+
+</script>
+
+</body>
+</html>
